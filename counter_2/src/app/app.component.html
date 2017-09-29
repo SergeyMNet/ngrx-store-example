@@ -1,0 +1,14 @@
+<button 
+  class="add-button" 
+  (click)="addCounter()" >Add</button>
+<button 
+  class="add-button" 
+  (click)="onResetAll()" >ResetAll</button>
+<hr>
+<counter *ngFor="let c of counts | async"
+  class="counter-item"
+  [count]="c.amount"
+  (increment)="onIncrement(c)"
+  (decrement)="onDecrement(c)"
+  (reset)="onReset(c)">
+</counter>
