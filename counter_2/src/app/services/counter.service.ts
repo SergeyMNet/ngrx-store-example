@@ -14,7 +14,7 @@ export class CounterService {
     counts$: Observable<Array<Counter>>;
     public id = 0 ; // simulating IDs
 
-    constructor(private store: Store<app_reducer.AppStore>) {
+    constructor(private store: Store<any>) {
         // counter - it's name of store
         this.counts$ = store.select( s => s.counter.entities );
     }
