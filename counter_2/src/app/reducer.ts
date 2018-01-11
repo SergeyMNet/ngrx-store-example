@@ -1,41 +1,42 @@
-import '@ngrx/core/add/operator/select';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/let';
 import { Observable } from 'rxjs/Observable';
-import { Counter } from "./models/counter.model";
+import { Counter } from './models/counter.model';
 import * as operations from './actions/operations';
-import { combineReducers, ActionReducer } from '@ngrx/store';
+import { combineReducers, ActionReducer, createFeatureSelector, createSelector } from '@ngrx/store';
 
-export interface State {
-  entities: Array<Counter>
+export interface AppStore {
+  entities: Counter[];
 };
 
-const initialState: State = { entities: [] };
+const initialState: AppStore = { entities: []};
 
-export function counter(state = initialState, action: operations.Actions): State {
+export const counter = (state = initialState, action: operations.Actions): AppStore => {
   switch (action.type) {
 
     case operations.ActionTypes.ADD_OPERATION: {
+      console.log('add oper');
       console.log(state);
-      const counter: Counter = action.payload;
+      const c: Counter = action.payload;
       return {
-        entities: [...state.entities, counter]
+        entities: [...state.entities, c]
       };
     }
 
     case operations.ActionTypes.INCREMENT_OPERATION: {
-      const counter = ++action.payload.amount;
+      const c = ++action.payload.amount;
       return Object.assign({}, state, {
-        entities: state.entities.map(item => item.id === action.payload.id ? Object.assign({}, item, counter) : item)
+        entities: state.entities.map(item => item.id === action.payload.id ? Object.assign({}, item, c) : item)
       });
     }
 
     case operations.ActionTypes.DECREMENT_OPERATION: {
-      if (action.payload.amount > 0)
+      if (action.payload.amount > 0) {
         --action.payload.amount;
-      const counter = action.payload.amount;
+      }
+      const c = action.payload.amount;
       return Object.assign({}, state, {
-        entities: state.entities.map(item => item.id === action.payload.id ? Object.assign({}, item, counter) : item)
+        entities: state.entities.map(item => item.id === action.payload.id ? Object.assign({}, item, c) : item)
       });
     }
 
@@ -47,18 +48,13 @@ export function counter(state = initialState, action: operations.Actions): State
     }
 
     case operations.ActionTypes.RESET_OPERATION: {
-      const counter = action.payload.amount = 0;
+      const c = action.payload.amount = 0;
       return Object.assign({}, state, {
-        entities: state.entities.map(item => item.id === action.payload.id ? Object.assign({}, item, counter) : item)
+        entities: state.entities.map(item => item.id === action.payload.id ? Object.assign({}, item, c) : item)
       });
     }
 
     default:
       return state;
   }
-}
-
-
-export function getEntities(state$: Observable<State>) {
-  return state$.select(s => s.entities);
 }
